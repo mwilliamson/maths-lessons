@@ -9,10 +9,19 @@ body {
 
 .container {
     margin: 0 auto;
-    max-width: 600px;
+    max-width: 630px;
 }
 
 .widget {
     display: inline-block;
+}
+
+div[data-widget] {
+    display: inline-block;
+    margin-right: 10px;
     background-color: #f3f3f3;
+}
+
+div[data-widget]:last-child {
+    margin-right: 0;
 }

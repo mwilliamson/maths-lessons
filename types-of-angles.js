@@ -10,6 +10,28 @@
         $("*[data-widget='display-angle']").each(function() {
             renderAngleWidget(this);
         });
+        $("*[data-widget='angle-example']").each(function() {
+            renderAngleExamplesWidget(this);
+        });
+    }
+    
+    function renderAngleExamplesWidget(element) {
+        var initialHeading = Math.random() * Math.PI * 2;
+        
+        var angleDegrees = element.getAttribute("data-angle");
+        var angle = angleDegrees / 180 * Math.PI;
+        
+        var finalHeading = initialHeading + angle;
+        
+        var svg = d3.select(element)
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height);
+        
+        drawVertex(svg);
+        drawArm(svg, initialHeading);
+        drawArm(svg, finalHeading);
+        drawMarker(svg, initialHeading, finalHeading);
     }
     
     function renderAngleWidget(element) {
@@ -23,21 +45,27 @@
             .attr("height", height);
         
         drawVertex(svg);
-        drawArm(svg, {x: centre.x + armLength, y: centre.y});
-        drawArm(svg, {
-            x: centre.x + Math.cos(angle) * armLength,
-            y: centre.y - Math.sin(angle) * armLength
-        });
-        drawMarker(svg, angle);
+        drawArm(svg, 0);
+        drawArm(svg, angle);
+        drawMarker(svg, 0, angle);
     }
     
-    function drawArm(svg, to) {
+    function drawArm(svg, angle) {
+        var to = calculateArmEnd(angle);
         svg.append("line")
             .attr("x1", centre.x)
             .attr("y1", centre.y)
             .attr("x2", to.x)
             .attr("y2", to.y)
             .style("stroke", "#3366ff");
+    }
+    
+    function calculateArmEnd(angle) {
+        var armLength = width / 2 * 0.8;
+        return {
+            x: centre.x + Math.cos(angle) * armLength,
+            y: centre.y - Math.sin(angle) * armLength
+        };
     }
     
     function drawVertex(svg) {
@@ -50,15 +78,19 @@
             .style("fill", vertexFillColour);
     }
     
-    function drawMarker(svg, angle) {
+    function drawMarker(svg, startAngle, endAngle) {
         var arc = d3.svg.arc()
             .innerRadius(20)
             .outerRadius(21)
-            .startAngle(Math.PI / 2)
-            .endAngle(-angle + Math.PI / 2);
+            .startAngle(polarAngleToD3Angle(startAngle))
+            .endAngle(polarAngleToD3Angle(endAngle));
             
         svg.append("path")
             .attr("d", arc)
             .attr("transform", "translate(" + centre.x + "," + centre.y + ")");
+    }
+    
+    function polarAngleToD3Angle(angle) {
+        return -angle + Math.PI / 2;
     }
 })();
