@@ -98,18 +98,42 @@
     }
     
     function drawMarker(svg, startAngle, endAngle) {
-        var arc = d3.svg.arc()
-            .innerRadius(20)
-            .outerRadius(21)
-            .startAngle(polarAngleToD3Angle(startAngle))
-            .endAngle(polarAngleToD3Angle(endAngle));
-            
+        var innerRadius = 20;
+        var strokeWidth = 1;
+        
+        if (isRightAngle(startAngle, endAngle)) {
+            var squareWidth = innerRadius / 4 * 3;
+            svg.append("line")
+                .attr("x1", centre.x + Math.cos(endAngle) * squareWidth)
+                .attr("y1", centre.y - Math.sin(endAngle) * squareWidth)
+                .attr("x2", centre.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
+                .attr("y2", centre.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
+                .style("stroke", "#000");
+                
+            svg.append("line")
+                .attr("x1", centre.x + Math.cos(startAngle) * squareWidth)
+                .attr("y1", centre.y - Math.sin(startAngle) * squareWidth)
+                .attr("x2", centre.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
+                .attr("y2", centre.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
+                .style("stroke", "#000");
+        } else {
+            var arc = d3.svg.arc()
+                .innerRadius(innerRadius)
+                .outerRadius(innerRadius + strokeWidth)
+                .startAngle(polarAngleToD3Angle(startAngle))
+                .endAngle(polarAngleToD3Angle(endAngle));
+                
         svg.append("path")
             .attr("d", arc)
             .attr("transform", "translate(" + centre.x + "," + centre.y + ")");
+        }
     }
     
     function polarAngleToD3Angle(angle) {
         return -angle + Math.PI / 2;
+    }
+    
+    function isRightAngle(startAngle, endAngle) {
+        return Math.abs(Math.abs(endAngle - startAngle) - Math.PI / 2) < 0.000001;
     }
 })();
