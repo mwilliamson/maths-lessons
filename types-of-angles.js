@@ -16,11 +16,8 @@
     }
     
     function renderAngleExamplesWidget(element) {
-        var initialHeading = Math.random() * Math.PI * 2;
-        
-        var angleDegrees = element.getAttribute("data-angle");
-        var angle = angleDegrees / 180 * Math.PI;
-        
+        var initialHeading = readInitialHeading(element);
+        var angle = readAngleAttribute(element, "data-angle");
         var finalHeading = initialHeading + angle;
         
         var svg = d3.select(element)
@@ -32,6 +29,28 @@
         drawArm(svg, initialHeading);
         drawArm(svg, finalHeading);
         drawMarker(svg, initialHeading, finalHeading);
+    }
+    
+    function readInitialHeading(element) {
+        var angle = readAngleAttribute(element, "data-initial-heading");
+        if (angle === null) {
+            return randomAngle();
+        } else {
+            return angle
+        }
+    }
+    
+    function readAngleAttribute(element, name) {
+        if (element.hasAttribute(name)) {
+            var angleDegrees = element.getAttribute(name);
+            return angleDegrees / 180 * Math.PI;
+        } else {
+            return null;
+        }
+    }
+    
+    function randomAngle() {
+        return Math.random() * Math.PI * 2;
     }
     
     function renderAngleWidget(element) {
