@@ -4,6 +4,44 @@
     
     var centre = {x: width / 2, y: height / 2};
     
+    renderRectangleAngleWidgets();
+    
+    function renderRectangleAngleWidgets() {
+        $("*[data-widget='rectangle-angle-example']").each(function() {
+            renderRectangleAngleExampleWidget(this);
+        });
+    }
+    
+    function renderRectangleAngleExampleWidget(element) {
+        var padding = 20;
+        var width = 1 * element.getAttribute("data-width");
+        var height = 1 * element.getAttribute("data-height");
+        
+        var svg = d3.select(element)
+            .append("svg")
+            .attr("width", width + 2 * padding)
+            .attr("height", height + 2 * padding);
+        
+        var rectanglePath = [
+            [0, 0],
+            [width, 0],
+            [width, height],
+            [0, height],
+            [0, 0]
+        ];
+        svg.append("path")
+            .datum(rectanglePath)
+            .attr("d", d3.svg.line())
+            .attr("transform", "translate(" + padding + "," + padding + ")")
+            .style("stroke", "#3366ff")
+            .style("fill", "none");
+        
+        drawMarker(svg, {x: padding, y: padding}, Math.PI * 3 / 2, Math.PI * 2);
+        drawMarker(svg, {x: padding + width, y: padding}, Math.PI, Math.PI * 3 / 2);
+        drawMarker(svg, {x: padding, y: padding + height}, 0, Math.PI / 2);
+        drawMarker(svg, {x: padding + width, y: padding + height}, Math.PI / 2, Math.PI);
+    }
+    
     renderAngleWidgets();
     
     function renderAngleWidgets() {
@@ -28,7 +66,7 @@
         drawVertex(svg);
         drawArm(svg, initialHeading);
         drawArm(svg, finalHeading);
-        drawMarker(svg, initialHeading, finalHeading);
+        drawMarker(svg, centre, initialHeading, finalHeading);
     }
     
     function readInitialHeading(element) {
@@ -66,7 +104,7 @@
         drawVertex(svg);
         drawArm(svg, 0);
         drawArm(svg, angle);
-        drawMarker(svg, 0, angle);
+        drawMarker(svg, centre, 0, angle);
     }
     
     function drawArm(svg, angle) {
@@ -97,24 +135,24 @@
             .style("fill", vertexFillColour);
     }
     
-    function drawMarker(svg, startAngle, endAngle) {
+    function drawMarker(svg, position, startAngle, endAngle) {
         var innerRadius = 20;
         var strokeWidth = 1;
         
         if (isRightAngle(startAngle, endAngle)) {
             var squareWidth = innerRadius / 4 * 3;
             svg.append("line")
-                .attr("x1", centre.x + Math.cos(endAngle) * squareWidth)
-                .attr("y1", centre.y - Math.sin(endAngle) * squareWidth)
-                .attr("x2", centre.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
-                .attr("y2", centre.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
+                .attr("x1", position.x + Math.cos(endAngle) * squareWidth)
+                .attr("y1", position.y - Math.sin(endAngle) * squareWidth)
+                .attr("x2", position.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
+                .attr("y2", position.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
                 .style("stroke", "#000");
                 
             svg.append("line")
-                .attr("x1", centre.x + Math.cos(startAngle) * squareWidth)
-                .attr("y1", centre.y - Math.sin(startAngle) * squareWidth)
-                .attr("x2", centre.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
-                .attr("y2", centre.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
+                .attr("x1", position.x + Math.cos(startAngle) * squareWidth)
+                .attr("y1", position.y - Math.sin(startAngle) * squareWidth)
+                .attr("x2", position.x + Math.cos(endAngle) * squareWidth + Math.cos(startAngle) * squareWidth)
+                .attr("y2", position.y - Math.sin(endAngle) * squareWidth - Math.sin(startAngle) * squareWidth)
                 .style("stroke", "#000");
         } else {
             var arc = d3.svg.arc()
@@ -125,7 +163,7 @@
                 
         svg.append("path")
             .attr("d", arc)
-            .attr("transform", "translate(" + centre.x + "," + centre.y + ")");
+            .attr("transform", "translate(" + position.x + "," + position.y + ")");
         }
     }
     

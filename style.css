@@ -19,6 +19,7 @@ body {
 div[data-widget] {
     display: inline-block;
     margin-right: 10px;
+    margin-bottom: 10px;
     background-color: #f3f3f3;
 }
 
