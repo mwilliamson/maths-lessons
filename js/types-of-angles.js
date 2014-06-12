@@ -1,3 +1,6 @@
+var $ = require("jquery");
+var d3 = require("d3");
+
 var width = 200;
 var height = width;
 
@@ -93,7 +96,6 @@ function randomAngle() {
 function renderAngleWidget(element) {
     var angleDegrees = element.getAttribute("data-angle");
     var angle = angleDegrees / 180 * Math.PI;
-    var armLength = width / 2 * 0.8;
     
     var svg = d3.select(element)
         .append("svg")

@@ -14,5 +14,10 @@
   "devDependencies": {
     "browserify": "^4.1.9",
     "jshint": "^2.5.1"
+  },
+  
+  "browser": {
+    "jquery": "./vendor/jquery-1.11.0.min.js",
+    "d3": "./vendor/d3-3.4.8.js"
   }
 }
