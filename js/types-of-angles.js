@@ -1,6 +1,8 @@
 var $ = require("jquery");
 var d3 = require("d3");
 
+var geometryDiagrams = require("./geometry-diagrams");
+
 var width = 200;
 var height = width;
 
@@ -15,14 +17,15 @@ function renderRectangleAngleWidgets() {
 }
 
 function renderRectangleAngleExampleWidget(element) {
-    var padding = 20;
     var width = 1 * element.getAttribute("data-width");
     var height = 1 * element.getAttribute("data-height");
     
-    var svg = d3.select(element)
-        .append("svg")
-        .attr("width", width + 2 * padding)
-        .attr("height", height + 2 * padding);
+    var diagram = geometryDiagrams.create({
+        parentElement: element,
+        height: height,
+        width: width,
+        padding: 20
+    });
     
     var rectanglePath = [
         [0, 0],
@@ -31,17 +34,15 @@ function renderRectangleAngleExampleWidget(element) {
         [0, height],
         [0, 0]
     ];
-    svg.append("path")
-        .datum(rectanglePath)
-        .attr("d", d3.svg.line())
-        .attr("transform", "translate(" + padding + "," + padding + ")")
-        .style("stroke", "#3366ff")
-        .style("fill", "none");
     
-    drawMarker(svg, {x: padding, y: padding}, Math.PI * 3 / 2, Math.PI * 2);
-    drawMarker(svg, {x: padding + width, y: padding}, Math.PI, Math.PI * 3 / 2);
-    drawMarker(svg, {x: padding, y: padding + height}, 0, Math.PI / 2);
-    drawMarker(svg, {x: padding + width, y: padding + height}, Math.PI / 2, Math.PI);
+    diagram.drawPath(rectanglePath, {
+        strokeColor: "#3366ff"
+    });
+    
+    diagram.drawAngleMarker({x: 0, y: 0}, {start: Math.PI / 2, end: Math.PI});
+    diagram.drawAngleMarker({x: width, y: 0}, {start: Math.PI, end: Math.PI * 3 / 2});
+    diagram.drawAngleMarker({x: 0, y: height}, {start: 0, end: Math.PI / 2});
+    diagram.drawAngleMarker({x: width, y: height}, {start: 0, end: -Math.PI / 2});
 }
 
 renderAngleWidgets();
