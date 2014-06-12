@@ -12,6 +12,7 @@
   },
   "homepage": "https://github.com/mwilliamson/maths-lessons",
   "devDependencies": {
-    "browserify": "^4.1.9"
+    "browserify": "^4.1.9",
+    "jshint": "^2.5.1"
   }
 }

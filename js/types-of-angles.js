@@ -73,7 +73,7 @@ function readInitialHeading(element) {
     if (angle === null) {
         return randomAngle();
     } else {
-        return angle
+        return angle;
     }
 }
 
