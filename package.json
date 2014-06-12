@@ -1,0 +1,17 @@
+{
+  "name": "maths-lessons",
+  "version": "0.0.0",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/mwilliamson/maths-lessons.git"
+  },
+  "author": "Michael Williamson",
+  "license": "BSD 2-Clause",
+  "bugs": {
+    "url": "https://github.com/mwilliamson/maths-lessons/issues"
+  },
+  "homepage": "https://github.com/mwilliamson/maths-lessons",
+  "devDependencies": {
+    "browserify": "^4.1.9"
+  }
+}
