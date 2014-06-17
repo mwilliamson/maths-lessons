@@ -26,3 +26,35 @@ div[data-widget] {
 div[data-widget]:last-child {
     margin-right: 0;
 }
+
+.test {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 10px 20px;
+}
+
+.test .choices {
+    margin: 0;
+    padding: 0;
+}
+
+.test .choices li {
+    display: inline-block;
+    margin: 0 10px;
+    padding: 5px 10px;
+    background-color: #039;
+    color: #fff;
+    cursor: pointer;
+}
+
+.test .choices li:first-child {
+    margin-left: 0;
+}
+
+.result {
+    min-height: 1em;
+}
+
+.result-correct {
+    color: #25990E;
+}
