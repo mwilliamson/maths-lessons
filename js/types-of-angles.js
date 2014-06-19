@@ -66,7 +66,7 @@ function renderAngleExamplesWidget(element) {
 
     var centre = {x: width / 2, y: height / 2};
 
-    var initialHeading = readInitialHeading(element);
+    var initialHeading = readAngleAttribute(element, "data-initial-heading");
     var angle = readAngleAttribute(element, "data-angle");
     var finalHeading = initialHeading + angle;
     
@@ -83,15 +83,6 @@ function renderAngleExamplesWidget(element) {
     diagram.drawArm({start: centre, azimuth: finalHeading, length: armLength});
 }
 
-function readInitialHeading(element) {
-    var angle = readAngleAttribute(element, "data-initial-heading");
-    if (angle === null) {
-        return randomAngle();
-    } else {
-        return angle;
-    }
-}
-
 function readAngleAttribute(element, name) {
     if (element.hasAttribute(name)) {
         var angleDegrees = element.getAttribute(name);
@@ -99,8 +90,4 @@ function readAngleAttribute(element, name) {
     } else {
         return null;
     }
-}
-
-function randomAngle() {
-    return Math.random() * Math.PI * 2;
 }
