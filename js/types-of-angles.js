@@ -6,9 +6,16 @@ renderRectangleAngleWidgets();
 renderAngleWidgets();
 renderTestWidgets();
 
-function renderTestWidgets() {
-    $("*[data-widget='types-of-angles-test']").each(function() {
-        renderTestWidget(this);
+var widgets = {
+    "types-of-angles-test": renderTestWidget,
+    "rectangle-angle-example": renderRectangleAngleExampleWidget,
+    "angle-example": renderAngleExamplesWidget
+};
+
+function renderWidgets() {
+    $("*[data-widget]").each(function() {
+        var widgetName = this.getAttribute("data-widget");
+        widgets[widgetName](this);
     });
 }
 
@@ -60,12 +67,6 @@ function renderMultipleChoice(element, question) {
     $(element).append(resultElement);
 }
 
-function renderRectangleAngleWidgets() {
-    $("*[data-widget='rectangle-angle-example']").each(function() {
-        renderRectangleAngleExampleWidget(this);
-    });
-}
-
 function renderRectangleAngleExampleWidget(element) {
     var width = 1 * element.getAttribute("data-width");
     var height = 1 * element.getAttribute("data-height");
@@ -91,12 +92,6 @@ function renderRectangleAngleExampleWidget(element) {
     diagram.drawAngleMarker({x: width, y: 0}, {start: Math.PI, end: Math.PI * 3 / 2});
     diagram.drawAngleMarker({x: 0, y: height}, {start: 0, end: Math.PI / 2});
     diagram.drawAngleMarker({x: width, y: height}, {start: 0, end: -Math.PI / 2});
-}
-
-function renderAngleWidgets() {
-    $("*[data-widget='angle-example']").each(function() {
-        renderAngleExamplesWidget(this);
-    });
 }
 
 function renderAngleExamplesWidget(element) {
