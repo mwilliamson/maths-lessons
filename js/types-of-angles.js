@@ -1,16 +1,15 @@
 var $ = require("jquery");
 
 var geometryDiagrams = require("./geometry-diagrams");
-
-renderRectangleAngleWidgets();
-renderAngleWidgets();
-renderTestWidgets();
+var multipleChoice = require("../widgets/multiple-choice");
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
     "rectangle-angle-example": renderRectangleAngleExampleWidget,
     "angle-example": renderAngleExamplesWidget
 };
+
+renderWidgets();
 
 function renderWidgets() {
     $("*[data-widget]").each(function() {
@@ -21,7 +20,7 @@ function renderWidgets() {
 
 function renderTestWidget(element) {
     var question = generateAngleMultipleChoiceQuestion();
-    renderMultipleChoice(element, question);
+    multipleChoice.render(element, question);
 }
 
 function generateAngleMultipleChoiceQuestion() {
@@ -32,39 +31,6 @@ function generateAngleMultipleChoiceQuestion() {
             {text: "Obtuse angle", isCorrect: true}
         ]
     };
-}
-
-function renderMultipleChoice(element, question) {
-    $(element).addClass("test");
-    
-    var textElement = $("<p>")
-        .text(question.text)
-        .addClass("question-text");
-    $(element).append(textElement);
-    
-    var choicesElement = $("<ul>").addClass("choices");
-    $(element).append(choicesElement);
-    
-    question.choices.forEach(function(choice) {
-        var choiceElement = $("<li>")
-            .text(choice.text);
-        choicesElement.append(choiceElement);
-        
-        choiceElement.on("click", function() {
-            if (choice.isCorrect) {
-                resultElement.addClass("result-correct");
-                resultElement.removeClass("result-incorrect");
-                resultElement.text("Correct!");
-            } else {
-                resultElement.addClass("result-incorrect");
-                resultElement.removeClass("result-correct");
-                resultElement.text("Incorrect");
-            }
-        });
-    });
-    
-    var resultElement = $("<p>").addClass("result");
-    $(element).append(resultElement);
 }
 
 function renderRectangleAngleExampleWidget(element) {
