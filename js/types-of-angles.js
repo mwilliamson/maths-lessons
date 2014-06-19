@@ -1,7 +1,7 @@
 var $ = require("jquery");
 
 var geometryDiagrams = require("./geometry-diagrams");
-var multipleChoice = require("../widgets/multiple-choice");
+var multipleChoice = require("./widgets/multiple-choice");
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
