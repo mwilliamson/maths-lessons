@@ -1,36 +1,35 @@
-var $ = require("jquery");
+var fs = require("fs");
+
+var knockout = require("knockout");
 
 exports.render = render;
 
 function render(element, question) {
-    $(element).addClass("test");
+    element.innerHTML = fs.readFileSync(__dirname + "/multiple-choice.html", "utf8");
     
-    var textElement = $("<p>")
-        .text(question.text)
-        .addClass("question-text");
-    $(element).append(textElement);
+    var resultText = knockout.observable();
+    var resultClass = knockout.observable();
     
-    var choicesElement = $("<ul>").addClass("choices");
-    $(element).append(choicesElement);
+    var viewModel = {
+        text: question.text,
+        choices: question.choices.map(function(choice) {
+            return {
+                text: choice.text,
+                select: function() {
+                    if (choice.isCorrect) {
+                        resultText("Correct!");
+                        resultClass("result-correct");
+                    } else {
+                        resultText("Incorrect");
+                        resultClass("result-incorrect");
+                    }
+                    
+                }
+            };
+        }),
+        resultText: resultText,
+        resultClass: resultClass
+    };
     
-    question.choices.forEach(function(choice) {
-        var choiceElement = $("<li>")
-            .text(choice.text);
-        choicesElement.append(choiceElement);
-        
-        choiceElement.on("click", function() {
-            if (choice.isCorrect) {
-                resultElement.addClass("result-correct");
-                resultElement.removeClass("result-incorrect");
-                resultElement.text("Correct!");
-            } else {
-                resultElement.addClass("result-incorrect");
-                resultElement.removeClass("result-correct");
-                resultElement.text("Incorrect");
-            }
-        });
-    });
-    
-    var resultElement = $("<p>").addClass("result");
-    $(element).append(resultElement);
+    knockout.applyBindingsToDescendants(viewModel, element);
 }
