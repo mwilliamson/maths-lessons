@@ -27,11 +27,17 @@ function renderTestWidget(element) {
 
 function generateAngleMultipleChoiceQuestion() {
     var types = ["Acute angle", "Right angle", "Obtuse angle", "Straight line", "Reflex angle", "Full turn"];
-    var selectedTypes = random.select(arrays.enumerate(types), 2);
+    var operations = [
+        {name: "larger", apply: function(a, b) { return a >= b; }},
+        {name: "smaller", apply: function(a, b) { return a <= b; }}
+    ];
+    
+    var selectedTypes = random.sample(arrays.enumerate(types), 2);
+    var operation = random.choice(operations);
     
     function isCorrect(type) {
         return selectedTypes.every(function(selectedType) {
-            return type.index >= selectedType.index;
+            return operation.apply(type.index, selectedType.index);
         });
     }
     
@@ -40,7 +46,7 @@ function generateAngleMultipleChoiceQuestion() {
     }
     
     return {
-        text: "Which angle is larger?",
+        text: "Which angle is " + operation.name + "?",
         choices: selectedTypes.map(angleTypeToChoice)
     };
 }
