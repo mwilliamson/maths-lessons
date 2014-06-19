@@ -2,6 +2,8 @@ var $ = require("jquery");
 
 var geometryDiagrams = require("./geometry-diagrams");
 var multipleChoice = require("./widgets/multiple-choice");
+var random = require("./random");
+var arrays = require("./arrays");
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
@@ -24,12 +26,22 @@ function renderTestWidget(element) {
 }
 
 function generateAngleMultipleChoiceQuestion() {
+    var types = ["Acute angle", "Right angle", "Obtuse angle", "Straight line", "Reflex angle", "Full turn"];
+    var selectedTypes = random.select(arrays.enumerate(types), 2);
+    
+    function isCorrect(type) {
+        return selectedTypes.every(function(selectedType) {
+            return type.index >= selectedType.index;
+        });
+    }
+    
+    function angleTypeToChoice(angleType) {
+        return {text: angleType.value, isCorrect: isCorrect(angleType)};
+    }
+    
     return {
         text: "Which angle is larger?",
-        choices: [
-            {text: "Acute angle", isCorrect: false},
-            {text: "Obtuse angle", isCorrect: true}
-        ]
+        choices: selectedTypes.map(angleTypeToChoice)
     };
 }
 
