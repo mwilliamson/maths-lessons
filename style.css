@@ -51,6 +51,16 @@ div[data-widget]:last-child {
     margin-left: 0;
 }
 
+.test .choices li.disabled {
+    background-color: #566C99;
+    cursor: default;
+}
+
+.test .choices li.disabled.selected {
+    background-color: #0055FF;
+}
+
+
 .result {
     min-height: 1em;
 }

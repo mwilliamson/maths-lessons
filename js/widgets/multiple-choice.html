@@ -1,5 +1,5 @@
 <p data-bind="text: text"></p>
 <ul class="choices" data-bind="foreach: choices">
-  <li data-bind="text: text, click: select"></li>
+  <li data-bind="text: text, click: select, css: {disabled: disabled, selected: selected}"></li>
 </ul>
 <p class="result" data-bind="text: resultText, css: resultClass"></p>
