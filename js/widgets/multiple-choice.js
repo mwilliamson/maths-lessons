@@ -2,15 +2,18 @@ var fs = require("fs");
 
 var knockout = require("knockout");
 
-exports.render = render;
+var knockoutWidgets = require("../knockout-widgets");
 
-function render(element, question) {
-    element.innerHTML = fs.readFileSync(__dirname + "/multiple-choice.html", "utf8");
-    
+exports.render = knockoutWidgets.create({
+    template: fs.readFileSync(__dirname + "/multiple-choice.html", "utf8"),
+    init: init
+});
+
+function init(question) {
     var resultText = knockout.observable();
     var resultClass = knockout.observable();
     
-    var viewModel = {
+    return {
         text: question.text,
         choices: question.choices.map(function(choice) {
             return {
@@ -30,6 +33,4 @@ function render(element, question) {
         resultText: resultText,
         resultClass: resultClass
     };
-    
-    knockout.applyBindingsToDescendants(viewModel, element);
 }

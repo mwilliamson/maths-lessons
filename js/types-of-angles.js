@@ -1,9 +1,32 @@
+var fs = require("fs");
+
 var $ = require("jquery");
+var knockout = require("knockout");
 
 var geometryDiagrams = require("./geometry-diagrams");
 var multipleChoice = require("./widgets/multiple-choice");
+var knockoutWidgets = require("./knockout-widgets");
 var random = require("./random");
 var arrays = require("./arrays");
+
+var renderTestWidget = knockoutWidgets.create({
+    template: fs.readFileSync(__dirname + "/test.html", "utf8"),
+    init: function() {
+        var progress = {
+            correct: 0,
+            total: 10
+        };
+        
+        var question = generateAngleMultipleChoiceQuestion();
+        return {
+            progress: progress,
+            question: question
+        };
+    },
+    dependencies: {
+        "multiple-choice": multipleChoice.render
+    }
+});
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
@@ -18,11 +41,6 @@ function renderWidgets() {
         var widgetName = this.getAttribute("data-widget");
         widgets[widgetName](this);
     });
-}
-
-function renderTestWidget(element) {
-    var question = generateAngleMultipleChoiceQuestion();
-    multipleChoice.render(element, question);
 }
 
 function generateAngleMultipleChoiceQuestion() {
