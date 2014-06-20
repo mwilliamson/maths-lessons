@@ -12,6 +12,7 @@ exports.render = knockoutWidgets.create({
 function init(options) {
     var question = options.question;
     var onAnswer = options.onAnswer;
+    var next = options.next;
     
     var resultText = knockout.observable();
     var resultClass = knockout.observable();
@@ -45,6 +46,7 @@ function init(options) {
             };
         }),
         resultText: resultText,
-        resultClass: resultClass
+        resultClass: resultClass,
+        next: next
     };
 }

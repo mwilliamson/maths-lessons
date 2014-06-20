@@ -46,17 +46,22 @@ function create(widgetOptions) {
     var dependencies = widgetOptions.dependencies || {};
     
     return function(element) {
-        var viewModel = init.apply(widgetOptions, Array.prototype.slice.call(arguments, 1));
-        var content = "<!-- ko __widgetBind: $data -->" + template + "<!-- /ko -->";
-        
-        var temporaryElement = document.createElement("div");
-        temporaryElement.innerHTML = content;
-        var nodes = Array.prototype.slice.call(temporaryElement.childNodes, 0);
-        knockout.virtualElements.setDomNodeChildren(element, nodes);
+        var args = Array.prototype.slice.call(arguments, 1);
+        knockout.computed(function() {
+            var viewModel = knockout.unwrap(init.apply(widgetOptions, args));
+            var content = "<!-- ko __widgetBind: $data -->" + template + "<!-- /ko -->";
+            
+            var temporaryElement = document.createElement("div");
+            temporaryElement.innerHTML = content;
+            var nodes = Array.prototype.slice.call(temporaryElement.childNodes, 0);
+            
+            // TODO: do we need to tidy up old bindings?
+            knockout.virtualElements.setDomNodeChildren(element, nodes);
 
-        knockout.utils.domData.set(knockout.virtualElements.firstChild(element), "__widgets", dependencies);
+            knockout.utils.domData.set(knockout.virtualElements.firstChild(element), "__widgets", dependencies);
 
-        knockout.applyBindingsToDescendants(viewModel, element);
+            knockout.applyBindingsToDescendants(viewModel, element);
+        });
     };
 }
 

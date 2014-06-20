@@ -17,7 +17,12 @@ var renderTestWidget = knockoutWidgets.create({
             total: 10
         };
         
-        var question = generateAngleMultipleChoiceQuestion();
+        var question = knockout.observable();
+        setQuestion();
+        
+        function setQuestion() {
+            question(generateAngleMultipleChoiceQuestion());
+        }
         
         function onAnswer(answer) {
             if (answer.isCorrect) {
@@ -25,13 +30,21 @@ var renderTestWidget = knockoutWidgets.create({
             }
         }
         
-        return {
-            progress: progress,
-            questionWidget: {
-                question: question,
-                onAnswer: onAnswer
-            }
-        };
+        function next() {
+            setQuestion();
+            console.log(question());
+        }
+        
+        return knockout.computed(function() {
+            return {
+                progress: progress,
+                questionWidget: {
+                    question: question(),
+                    onAnswer: onAnswer,
+                    next: next
+                }
+            };
+        });
     },
     dependencies: {
         "multiple-choice": multipleChoice.render
