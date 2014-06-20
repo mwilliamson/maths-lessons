@@ -9,7 +9,10 @@ exports.render = knockoutWidgets.create({
     init: init
 });
 
-function init(question) {
+function init(options) {
+    var question = options.question;
+    var onAnswer = options.onAnswer;
+    
     var resultText = knockout.observable();
     var resultClass = knockout.observable();
     
@@ -26,7 +29,9 @@ function init(question) {
                         resultText("Incorrect");
                         resultClass("result-incorrect");
                     }
-                    
+                    onAnswer({
+                        isCorrect: choice.isCorrect
+                    });
                 }
             };
         }),

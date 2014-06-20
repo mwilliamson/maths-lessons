@@ -13,14 +13,24 @@ var renderTestWidget = knockoutWidgets.create({
     template: fs.readFileSync(__dirname + "/test.html", "utf8"),
     init: function() {
         var progress = {
-            correct: 0,
+            correct: knockout.observable(0),
             total: 10
         };
         
         var question = generateAngleMultipleChoiceQuestion();
+        
+        function onAnswer(answer) {
+            if (answer.isCorrect) {
+                progress.correct(progress.correct() + 1);
+            }
+        }
+        
         return {
             progress: progress,
-            question: question
+            questionWidget: {
+                question: question,
+                onAnswer: onAnswer
+            }
         };
     },
     dependencies: {
