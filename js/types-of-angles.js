@@ -32,7 +32,6 @@ var renderTestWidget = knockoutWidgets.create({
         
         function next() {
             setQuestion();
-            console.log(question());
         }
         
         return knockout.computed(function() {
