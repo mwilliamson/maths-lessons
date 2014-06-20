@@ -47,8 +47,9 @@ function create(widgetOptions) {
     
     return function(element) {
         var args = Array.prototype.slice.call(arguments, 1);
+        var viewModelValue = init.apply(widgetOptions, args);
         knockout.computed(function() {
-            var viewModel = knockout.unwrap(init.apply(widgetOptions, args));
+            var viewModel = knockout.unwrap(viewModelValue);
             var content = "<!-- ko __widgetBind: $data -->" + template + "<!-- /ko -->";
             
             var temporaryElement = document.createElement("div");
