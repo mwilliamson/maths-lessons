@@ -1,8 +1,7 @@
 var fs = require("fs");
 
 var knockout = require("knockout");
-
-var knockoutWidgets = require("../knockout-widgets");
+var knockoutWidgets = require("web-widgets-knockout");
 
 exports.render = knockoutWidgets.create({
     template: fs.readFileSync(__dirname + "/multiple-choice.html", "utf8"),

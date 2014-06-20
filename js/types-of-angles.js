@@ -2,10 +2,10 @@ var fs = require("fs");
 
 var $ = require("jquery");
 var knockout = require("knockout");
+var knockoutWidgets = require("web-widgets-knockout");
 
 var geometryDiagrams = require("./geometry-diagrams");
 var multipleChoice = require("./widgets/multiple-choice");
-var knockoutWidgets = require("./knockout-widgets");
 var random = require("./random");
 var arrays = require("./arrays");
 
