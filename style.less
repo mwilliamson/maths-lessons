@@ -17,7 +17,6 @@ body {
 }
 
 div[data-widget] {
-    display: inline-block;
     margin-right: 10px;
     margin-bottom: 10px;
     background-color: #f3f3f3;
@@ -25,6 +24,10 @@ div[data-widget] {
 
 div[data-widget]:last-child {
     margin-right: 0;
+}
+
+div[data-widget='angle-example'] {
+    display: inline-block;
 }
 
 .action {
@@ -86,4 +89,14 @@ div[data-widget]:last-child {
 
 .result-correct {
     color: #25990E;
+}
+
+.row-2 div:first-child {
+    margin: 0 10% 0 0;
+}
+
+.row-2 div {
+    display: inline-block;
+    width: 44%;
+    box-sizing: border-box;
 }
