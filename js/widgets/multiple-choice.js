@@ -1,5 +1,6 @@
 var fs = require("fs");
 
+var _ = require("underscore");
 var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
@@ -33,7 +34,10 @@ function init(options) {
                         resultText("Correct!");
                         resultClass("result-correct");
                     } else {
-                        resultText("Incorrect");
+                        var correctChoice = _.find(question.choices, function(choice) {
+                            return choice.isCorrect;
+                        });
+                        resultText("The correct answer is: " + correctChoice.text);
                         resultClass("result-incorrect");
                     }
                     selected(true);
