@@ -6,7 +6,7 @@ check:
 	node_modules/.bin/jshint js
 
 types-of-angles.js:
-	node_modules/.bin/browserify js/types-of-angles.js > $@
+	node_modules/.bin/browserify js/types-of-angles.js -o $@
 
 style.css: style.less
 	node_modules/.bin/lessc style.less style.css
