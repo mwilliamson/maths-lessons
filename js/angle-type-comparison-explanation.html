@@ -1,6 +1,7 @@
 <div class="row-2" data-bind="foreach: angleTypes">
   <div>
     <h3 data-bind="text: name"></h3>
+    <p><span data-bind="text: description"></span> For instance:</p>
     <div data-bind="widget: 'drawAngle', widgetOptions: {startAzimuth: 90, angle: -exampleAngle}">
     </div>
   </div>

@@ -34,26 +34,32 @@ function generateAngleMultipleChoiceQuestion() {
     var types = [
         {
             name: "Acute angle",
+            description: "Acute angles are greater than 0° and less than 90°. In other words, acute angles are smaller than right angles.",
             exampleAngle: 30
         },
         {
             name: "Right angle",
+            description: "There are 90° in a right angle.",
             exampleAngle: 90
         },
         {
-            name: "Obtuse angle", 
+            name: "Obtuse angle",
+            description: "Obtuse angles are larger than 90° and smaller than 180°. In other words, obtuse angles are larger than right angles and smaller than straight lines.",
             exampleAngle: 120
         },
         {
             name: "Straight line",
+            description: "There are 180° in a straight line.",
             exampleAngle: 180
         },
         {
             name: "Reflex angle",
+            description: "Reflex angles are larger than 180°. In other words, reflex angles are larger than straight lines.",
             exampleAngle: 290
         },
         {
             name: "Full turn",
+            description: "There are 360° in a full turn",
             exampleAngle: 360
         }
     ];
