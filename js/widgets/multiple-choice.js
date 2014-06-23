@@ -15,6 +15,7 @@ function init(options) {
     var resultText = knockout.observable();
     var resultClass = knockout.observable();
     var disabled = knockout.observable(false);
+    var shouldShowExplanation = knockout.observable(false);
     
     return {
         text: question.text,
@@ -44,6 +45,9 @@ function init(options) {
             };
         }),
         resultText: resultText,
-        resultClass: resultClass
+        resultClass: resultClass,
+        shouldShowExplanation: shouldShowExplanation,
+        showExplanation: shouldShowExplanation.bind(null, true),
+        explanationWidget: question.explanationWidget
     };
 }

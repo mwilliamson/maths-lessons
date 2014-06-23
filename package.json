@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "knockout": "^3.1.0",
-    "web-widgets-knockout": "^0.1.0",
+    "web-widgets-knockout": "^0.1.1",
     "knuth-shuffle": "^1.0.0",
     "less": "^1.7.3"
   }

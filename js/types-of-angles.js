@@ -47,9 +47,14 @@ function generateAngleMultipleChoiceQuestion() {
         return {text: angleType.value, isCorrect: isCorrect(angleType)};
     }
     
+    var explanationWidget = function(element) {
+        element.innerHTML = "TODO: explanation";
+    };
+    
     return {
         text: "Which angle is " + operation.name + "?",
-        choices: selectedTypes.map(angleTypeToChoice)
+        choices: selectedTypes.map(angleTypeToChoice),
+        explanationWidget: explanationWidget
     };
 }
 
