@@ -11,26 +11,25 @@ exports.render = knockoutWidgets.create({
     init: function(options) {
         var generateQuestion = options.generateQuestion;
         
+        var showNextQuestion = knockout.observable(false);
         var progress = {
             correct: knockout.observable(0),
             total: 10
         };
         
         var question = knockout.observable();
-        setQuestion();
+        next();
         
-        function setQuestion() {
+        function next() {
             question(generateQuestion());
+            showNextQuestion(false);
         }
         
         function onAnswer(answer) {
             if (answer.isCorrect) {
                 progress.correct(progress.correct() + 1);
             }
-        }
-        
-        function next() {
-            setQuestion();
+            showNextQuestion(true);
         }
         
         return knockout.computed(function() {
@@ -38,9 +37,10 @@ exports.render = knockoutWidgets.create({
                 progress: progress,
                 questionWidget: {
                     question: question(),
-                    onAnswer: onAnswer,
-                    next: next
-                }
+                    onAnswer: onAnswer
+                },
+                showNextQuestion: showNextQuestion,
+                next: next
             };
         });
     },
