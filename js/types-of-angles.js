@@ -5,50 +5,16 @@ var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
 var geometryDiagrams = require("./geometry-diagrams");
-var multipleChoice = require("./widgets/multiple-choice");
 var random = require("./random");
 var arrays = require("./arrays");
 
-var renderTestWidget = knockoutWidgets.create({
-    template: fs.readFileSync(__dirname + "/test.html", "utf8"),
-    init: function() {
-        var progress = {
-            correct: knockout.observable(0),
-            total: 10
-        };
-        
-        var question = knockout.observable();
-        setQuestion();
-        
-        function setQuestion() {
-            question(generateAngleMultipleChoiceQuestion());
-        }
-        
-        function onAnswer(answer) {
-            if (answer.isCorrect) {
-                progress.correct(progress.correct() + 1);
-            }
-        }
-        
-        function next() {
-            setQuestion();
-        }
-        
-        return knockout.computed(function() {
-            return {
-                progress: progress,
-                questionWidget: {
-                    question: question(),
-                    onAnswer: onAnswer,
-                    next: next
-                }
-            };
-        });
-    },
-    dependencies: {
-        "multiple-choice": multipleChoice.render
-    }
-});
+var testWidget = require("./widgets/test");
+
+var renderTestWidget = function(element) {
+    return testWidget.render(element, {
+        generateQuestion: generateAngleMultipleChoiceQuestion
+    });
+};
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
