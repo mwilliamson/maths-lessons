@@ -27,6 +27,18 @@ div[data-widget]:last-child {
     margin-right: 0;
 }
 
+.action {
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.primary-action {
+    .action;
+
+    background-color: #019300;
+    color: #fff;
+}
+
 .test {
     box-sizing: border-box;
     width: 100%;
@@ -39,12 +51,12 @@ div[data-widget]:last-child {
 }
 
 .test .choices li {
+    .action;
+    
     display: inline-block;
-    margin: 0 10px;
-    padding: 5px 10px;
+    margin: 0 0 0 10px;
     background-color: #039;
     color: #fff;
-    cursor: pointer;
 }
 
 .test .choices li:first-child {
