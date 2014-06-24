@@ -1,0 +1,87 @@
+body {
+  overflow-y: scroll;
+  margin: 0;
+  padding: 0;
+  font-family: "Merriweather", Georgia, serif;
+  font-size: 14px;
+  line-height: 1.7;
+}
+.container {
+  margin: 0 auto;
+  max-width: 630px;
+}
+.widget {
+  display: inline-block;
+}
+div[data-widget] {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #f3f3f3;
+}
+div[data-widget]:last-child {
+  margin-right: 0;
+}
+div[data-widget='angle-example'] {
+  display: inline-block;
+}
+.action {
+  padding: 5px 10px;
+  cursor: pointer;
+}
+.primary-action {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #019300;
+  color: #fff;
+}
+.secondary-action {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #019300;
+  color: #fff;
+}
+.test {
+  box-sizing: border-box;
+  width: 100%;
+  padding: 10px 20px;
+}
+.test .choices {
+  margin: 0;
+  padding: 0;
+}
+.test .choices li {
+  padding: 5px 10px;
+  cursor: pointer;
+  display: inline-block;
+  margin: 0 0 0 10px;
+  background-color: #039;
+  color: #fff;
+}
+.test .choices li:first-child {
+  margin-left: 0;
+}
+.test .choices li.disabled {
+  background-color: #566C99;
+  cursor: default;
+}
+.test .choices li.disabled.selected {
+  background-color: #0055FF;
+}
+.result {
+  min-height: 1em;
+}
+.result-correct {
+  color: #25990E;
+}
+.row-2 {
+  overflow: auto;
+}
+.row-2 div:first-child {
+  margin: 0 10% 0 0;
+}
+.row-2 div {
+  float: left;
+  display: block;
+  width: 44%;
+  box-sizing: border-box;
+}
