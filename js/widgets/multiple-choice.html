@@ -2,10 +2,3 @@
 <ul class="choices" data-bind="foreach: choices">
   <li data-bind="text: text, click: select, css: {disabled: disabled, selected: selected}"></li>
 </ul>
-<!-- ko if: resultText -->
-  <p class="result" data-bind="text: resultText, css: resultClass"></p>
-  <p class="secondary-action" data-bind="click: showExplanation">Show explanation</p>
-<!-- /ko -->
-<!-- ko if: shouldShowExplanation -->
-  <div data-bind="widget: explanationWidget"></div>
-<!-- /ko -->

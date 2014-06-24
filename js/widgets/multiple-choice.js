@@ -11,13 +11,15 @@ exports.render = knockoutWidgets.create({
 
 function init(options) {
     var question = options.question;
-    var explanationWidget = options.explanationWidget;
     var onAnswer = options.onAnswer;
     
-    var resultText = knockout.observable();
-    var resultClass = knockout.observable();
     var disabled = knockout.observable(false);
-    var shouldShowExplanation = knockout.observable(false);
+    
+    function correctChoice() {
+        return _.find(question.choices, function(choice) {
+            return choice.isCorrect;
+        });
+    }
     
     return {
         text: question.text,
@@ -31,28 +33,19 @@ function init(options) {
                     if (disabled()) {
                         return;
                     }
-                    if (choice.isCorrect) {
-                        resultText("Correct!");
-                        resultClass("result-correct");
-                    } else {
-                        var correctChoice = _.find(question.choices, function(choice) {
-                            return choice.isCorrect;
-                        });
-                        resultText("The correct answer is: " + correctChoice.text);
-                        resultClass("result-incorrect");
-                    }
                     selected(true);
                     disabled(true);
+                    
+                    var resultText = choice.isCorrect ?
+                        "Correct!" :
+                        "The correct answer is: " + correctChoice().text;
+                    
                     onAnswer({
-                        isCorrect: choice.isCorrect
+                        isCorrect: choice.isCorrect,
+                        resultText: resultText
                     });
                 }
             };
-        }),
-        resultText: resultText,
-        resultClass: resultClass,
-        shouldShowExplanation: shouldShowExplanation,
-        showExplanation: shouldShowExplanation.bind(null, true),
-        explanationWidget: explanationWidget
+        })
     };
 }

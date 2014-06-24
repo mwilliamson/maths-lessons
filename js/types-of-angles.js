@@ -10,6 +10,7 @@ var random = require("./random");
 var arrays = require("./arrays");
 var testWidget = require("./widgets/test");
 var multipleChoice = require("./widgets/multiple-choice");
+var questionWithExplanation = require("./widgets/question-with-explanation");
 
 var renderTestWidget = function(element) {
     return testWidget.render(element, {
@@ -97,10 +98,14 @@ function generateAngleTypeComparisonQuestionWidget(onAnswer) {
         }
     });
     
-    // TODO: add argument binding for widgets
     return function(element) {
-        return multipleChoice.render(element, {
-            question: question,
+        return questionWithExplanation.render(element, {
+            // TODO: add argument binding for widgets
+            questionWidget: function(element, options) {
+                var finalOptions = {question: question};
+                _.extend(finalOptions, options);
+                multipleChoice.render(element, finalOptions);
+            },
             explanationWidget: explanationWidget,
             onAnswer: onAnswer
         });
