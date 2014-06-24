@@ -76,7 +76,7 @@ function renderWidgets() {
 function generateQuestion(onAnswer) {
     var generator = random.choice([
         generateAngleTypeComparisonQuestionWidget,
-        generateAngleIdentificationQuestion
+        generateAngleIdentificationQuestionWidget
     ]);
     return generator(onAnswer);
 }
@@ -129,21 +129,12 @@ function generateAngleTypeComparisonQuestion() {
     };
 }
 
-function generateAngleIdentificationQuestion(onAnswer) {
-    var angleType = random.choice(angleTypes);
-    var angle;
-    var range = angleType.exampleRange;
-    if (range) {
-        angle = random.integer(range[0], range[1]);
-    } else {
-        angle = angleType.exampleAngle;
-    }
+function generateAngleIdentificationQuestionWidget(onAnswer) {
+    var question = generateAngleIdentificationQuestion();
     
     var answer = knockout.observable("");
     function submitAnswer() {
-        var userAnswer = answer();
-        // TODO: be a bit more sophisticated (for instance, you can pass just by entering all keywords)
-        var isCorrect = userAnswer.toLowerCase().indexOf(angleType.keyword) !== -1;
+        var isCorrect = question.isCorrect(answer());
         onAnswer({isCorrect: isCorrect});
     }
     
@@ -152,8 +143,8 @@ function generateAngleIdentificationQuestion(onAnswer) {
         init: function() {
             return {
                 drawAngleOptions: {
-                    angle: angle,
-                    startAzimuth: random.integer(0, 360)
+                    angle: question.angle,
+                    startAzimuth: question.startAzimuth
                 },
                 submitAnswer: submitAnswer,
                 answer: answer
@@ -163,6 +154,29 @@ function generateAngleIdentificationQuestion(onAnswer) {
             "drawAngle": drawAngleWidget
         }
     });
+}
+
+function generateAngleIdentificationQuestion() {
+    var startAzimuth = random.integer(0, 360);
+    var angleType = random.choice(angleTypes);
+    var angle;
+    var range = angleType.exampleRange;
+    if (range) {
+        angle = random.integer(range[0], range[1]);
+    } else {
+        angle = angleType.exampleAngle;
+    }
+    
+    function isCorrect(answer) {
+        // TODO: be a bit more sophisticated (for instance, you can pass just by entering all keywords)
+        return answer.toLowerCase().indexOf(angleType.keyword) !== -1;
+    }
+    
+    return {
+        angle: angle,
+        startAzimuth: startAzimuth,
+        isCorrect: isCorrect
+    };
 }
 
 function renderRectangleAngleExampleWidget(element) {
