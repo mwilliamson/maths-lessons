@@ -100,12 +100,7 @@ function generateAngleTypeComparisonQuestionWidget(onAnswer) {
     
     return function(element) {
         return questionWithExplanation.render(element, {
-            // TODO: add argument binding for widgets
-            questionWidget: function(element, options) {
-                var finalOptions = {question: question};
-                _.extend(finalOptions, options);
-                multipleChoice.render(element, finalOptions);
-            },
+            questionWidget: withOptions(multipleChoice.render, {question: question}),
             explanationWidget: explanationWidget,
             onAnswer: onAnswer
         });
@@ -240,4 +235,12 @@ function degreesToRadians(value) {
     } else {
         return value;
     }
+}
+
+function withOptions(widget, boundOptions) {
+    return function(element, options) {
+        var finalOptions = _.clone(boundOptions);
+        _.extend(finalOptions, options);
+        widget(element, finalOptions);
+    };
 }
