@@ -3,8 +3,6 @@ var fs = require("fs");
 var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
-var multipleChoice = require("./multiple-choice");
-
 
 exports.render = knockoutWidgets.create({
     template: fs.readFileSync(__dirname + "/test.html", "utf8"),
@@ -21,7 +19,7 @@ exports.render = knockoutWidgets.create({
         next();
         
         function next() {
-            question(generateQuestion());
+            question(generateQuestion(onAnswer));
             showNextQuestion(false);
         }
         
@@ -35,16 +33,10 @@ exports.render = knockoutWidgets.create({
         return knockout.computed(function() {
             return {
                 progress: progress,
-                questionWidget: {
-                    question: question(),
-                    onAnswer: onAnswer
-                },
+                questionWidget: question(),
                 showNextQuestion: showNextQuestion,
                 next: next
             };
         });
-    },
-    dependencies: {
-        "multiple-choice": multipleChoice.render
     }
 });

@@ -8,6 +8,7 @@ var geometryDiagrams = require("./geometry-diagrams");
 var random = require("./random");
 var arrays = require("./arrays");
 var testWidget = require("./widgets/test");
+var multipleChoice = require("./widgets/multiple-choice");
 
 var renderTestWidget = function(element) {
     return testWidget.render(element, {
@@ -30,7 +31,7 @@ function renderWidgets() {
     });
 }
 
-function generateAngleMultipleChoiceQuestion() {
+function generateAngleMultipleChoiceQuestion(onAnswer) {
     var types = [
         {
             name: "Acute angle",
@@ -93,10 +94,16 @@ function generateAngleMultipleChoiceQuestion() {
         }
     });
     
-    return {
-        text: "Which angle is " + operation.name + "?",
-        choices: selectedTypes.map(angleTypeToChoice),
-        explanationWidget: explanationWidget
+    // TODO: add argument binding for widgets
+    return function(element) {
+        return multipleChoice.render(element, {
+            question: {
+                text: "Which angle is " + operation.name + "?",
+                choices: selectedTypes.map(angleTypeToChoice),
+                explanationWidget: explanationWidget
+            },
+            onAnswer: onAnswer
+        });
     };
 }
 
