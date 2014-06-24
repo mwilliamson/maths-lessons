@@ -22,48 +22,6 @@ var widgets = {
     "angle-example": renderAngleExamplesWidget
 };
 
-var angleTypes = [
-    {
-        keyword: "acute",
-        name: "Acute angle",
-        description: "Acute angles are greater than 0° and less than 90°. In other words, acute angles are smaller than right angles.",
-        exampleAngle: 30,
-        exampleRange: [20, 70]
-    },
-    {
-        keyword: "right",
-        name: "Right angle",
-        description: "There are 90° in a right angle.",
-        exampleAngle: 90
-    },
-    {
-        keyword: "obtuse",
-        name: "Obtuse angle",
-        description: "Obtuse angles are larger than 90° and smaller than 180°. In other words, obtuse angles are larger than right angles and smaller than straight lines.",
-        exampleAngle: 120,
-        exampleRange: [110, 160]
-    },
-    {
-        keyword: "straight",
-        name: "Straight line",
-        description: "There are 180° in a straight line.",
-        exampleAngle: 180
-    },
-    {
-        keyword: "reflex",
-        name: "Reflex angle",
-        description: "Reflex angles are larger than 180°. In other words, reflex angles are larger than straight lines.",
-        exampleAngle: 290,
-        exampleRange: [200, 340]
-    },
-    {
-        keyword: "full",
-        name: "Full turn",
-        description: "There are 360° in a full turn",
-        exampleAngle: 360
-    }
-];
-
 renderWidgets();
 
 function renderWidgets() {
@@ -104,6 +62,39 @@ function generateAngleTypeComparisonQuestionWidget(onAnswer) {
 }
 
 function generateAngleTypeComparisonQuestion() {
+    var angleTypes = [
+        {
+            name: "Acute angle",
+            description: "Acute angles are greater than 0° and less than 90°. In other words, acute angles are smaller than right angles.",
+            exampleAngle: 30
+        },
+        {
+            name: "Right angle",
+            description: "There are 90° in a right angle.",
+            exampleAngle: 90
+        },
+        {
+            name: "Obtuse angle",
+            description: "Obtuse angles are larger than 90° and smaller than 180°. In other words, obtuse angles are larger than right angles and smaller than straight lines.",
+            exampleAngle: 120
+        },
+        {
+            name: "Straight line",
+            description: "There are 180° in a straight line.",
+            exampleAngle: 180
+        },
+        {
+            name: "Reflex angle",
+            description: "Reflex angles are larger than 180°. In other words, reflex angles are larger than straight lines.",
+            exampleAngle: 290
+        },
+        {
+            name: "Full turn",
+            description: "There are 360° in a full turn",
+            exampleAngle: 360
+        }
+    ];
+    
     var operations = [
         {name: "larger", apply: function(a, b) { return a >= b; }},
         {name: "smaller", apply: function(a, b) { return a <= b; }}
@@ -157,14 +148,42 @@ function generateAngleIdentificationQuestionWidget(onAnswer) {
 }
 
 function generateAngleIdentificationQuestion() {
+    var angleTypes = [
+        {
+            keyword: "acute",
+            range: [0, 90]
+        },
+        {
+            keyword: "right",
+            angle: 90
+        },
+        {
+            keyword: "obtuse",
+            range: [90, 180]
+        },
+        {
+            keyword: "straight",
+            angle: 180
+        },
+        {
+            keyword: "reflex",
+            range: [180, 360]
+        },
+        {
+            keyword: "full",
+            angle: 360
+        }
+    ];
+
     var startAzimuth = random.integer(0, 360);
     var angleType = random.choice(angleTypes);
     var angle;
-    var range = angleType.exampleRange;
+    var range = angleType.range;
     if (range) {
-        angle = random.integer(range[0], range[1]);
+        var anglePadding = 20;
+        angle = random.integer(range[0] + anglePadding, range[1] - anglePadding);
     } else {
-        angle = angleType.exampleAngle;
+        angle = angleType.angle;
     }
     
     function isCorrect(answer) {
