@@ -2,6 +2,7 @@ var fs = require("fs");
 
 var $ = require("jquery");
 var knockoutWidgets = require("web-widgets-knockout");
+var knockout = require("knockout");
 var _ = require("underscore");
 
 var geometryDiagrams = require("./geometry-diagrams");
@@ -12,7 +13,7 @@ var multipleChoice = require("./widgets/multiple-choice");
 
 var renderTestWidget = function(element) {
     return testWidget.render(element, {
-        generateQuestion: generateAngleMultipleChoiceQuestion
+        generateQuestion: generateQuestion
     });
 };
 
@@ -21,6 +22,48 @@ var widgets = {
     "rectangle-angle-example": renderRectangleAngleExampleWidget,
     "angle-example": renderAngleExamplesWidget
 };
+
+var angleTypes = [
+    {
+        keyword: "acute",
+        name: "Acute angle",
+        description: "Acute angles are greater than 0° and less than 90°. In other words, acute angles are smaller than right angles.",
+        exampleAngle: 30,
+        exampleRange: [20, 70]
+    },
+    {
+        keyword: "right",
+        name: "Right angle",
+        description: "There are 90° in a right angle.",
+        exampleAngle: 90
+    },
+    {
+        keyword: "obtuse",
+        name: "Obtuse angle",
+        description: "Obtuse angles are larger than 90° and smaller than 180°. In other words, obtuse angles are larger than right angles and smaller than straight lines.",
+        exampleAngle: 120,
+        exampleRange: [110, 160]
+    },
+    {
+        keyword: "straight",
+        name: "Straight line",
+        description: "There are 180° in a straight line.",
+        exampleAngle: 180
+    },
+    {
+        keyword: "reflex",
+        name: "Reflex angle",
+        description: "Reflex angles are larger than 180°. In other words, reflex angles are larger than straight lines.",
+        exampleAngle: 290,
+        exampleRange: [200, 340]
+    },
+    {
+        keyword: "full",
+        name: "Full turn",
+        description: "There are 360° in a full turn",
+        exampleAngle: 360
+    }
+];
 
 renderWidgets();
 
@@ -31,45 +74,21 @@ function renderWidgets() {
     });
 }
 
+function generateQuestion(onAnswer) {
+    var generator = random.choice([
+        generateAngleMultipleChoiceQuestion,
+        generateAngleIdentificationQuestion
+    ]);
+    return generator(onAnswer);
+}
+
 function generateAngleMultipleChoiceQuestion(onAnswer) {
-    var types = [
-        {
-            name: "Acute angle",
-            description: "Acute angles are greater than 0° and less than 90°. In other words, acute angles are smaller than right angles.",
-            exampleAngle: 30
-        },
-        {
-            name: "Right angle",
-            description: "There are 90° in a right angle.",
-            exampleAngle: 90
-        },
-        {
-            name: "Obtuse angle",
-            description: "Obtuse angles are larger than 90° and smaller than 180°. In other words, obtuse angles are larger than right angles and smaller than straight lines.",
-            exampleAngle: 120
-        },
-        {
-            name: "Straight line",
-            description: "There are 180° in a straight line.",
-            exampleAngle: 180
-        },
-        {
-            name: "Reflex angle",
-            description: "Reflex angles are larger than 180°. In other words, reflex angles are larger than straight lines.",
-            exampleAngle: 290
-        },
-        {
-            name: "Full turn",
-            description: "There are 360° in a full turn",
-            exampleAngle: 360
-        }
-    ];
     var operations = [
         {name: "larger", apply: function(a, b) { return a >= b; }},
         {name: "smaller", apply: function(a, b) { return a <= b; }}
     ];
     
-    var selectedTypes = random.sample(arrays.enumerate(types), 2);
+    var selectedTypes = random.sample(arrays.enumerate(angleTypes), 2);
     var operation = random.choice(operations);
     
     function isCorrect(type) {
@@ -105,6 +124,42 @@ function generateAngleMultipleChoiceQuestion(onAnswer) {
             onAnswer: onAnswer
         });
     };
+}
+
+function generateAngleIdentificationQuestion(onAnswer) {
+    var angleType = random.choice(angleTypes);
+    var angle;
+    var range = angleType.exampleRange;
+    if (range) {
+        angle = random.integer(range[0], range[1]);
+    } else {
+        angle = angleType.exampleAngle;
+    }
+    
+    var answer = knockout.observable("");
+    function submitAnswer() {
+        var userAnswer = answer();
+        // TODO: be a bit more sophisticated (for instance, you can pass just by entering all keywords)
+        var isCorrect = userAnswer.toLowerCase().indexOf(angleType.keyword) !== -1;
+        onAnswer({isCorrect: isCorrect});
+    }
+    
+    return knockoutWidgets.create({
+        template: fs.readFileSync(__dirname + "/angle-type-identification.html"),
+        init: function() {
+            return {
+                drawAngleOptions: {
+                    angle: angle,
+                    startAzimuth: random.integer(0, 360)
+                },
+                submitAnswer: submitAnswer,
+                answer: answer
+            };
+        },
+        dependencies: {
+            "drawAngle": drawAngleWidget
+        }
+    });
 }
 
 function renderRectangleAngleExampleWidget(element) {
