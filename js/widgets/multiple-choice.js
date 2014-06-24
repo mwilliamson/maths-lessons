@@ -11,6 +11,7 @@ exports.render = knockoutWidgets.create({
 
 function init(options) {
     var question = options.question;
+    var explanationWidget = options.explanationWidget;
     var onAnswer = options.onAnswer;
     
     var resultText = knockout.observable();
@@ -52,6 +53,6 @@ function init(options) {
         resultClass: resultClass,
         shouldShowExplanation: shouldShowExplanation,
         showExplanation: shouldShowExplanation.bind(null, true),
-        explanationWidget: question.explanationWidget
+        explanationWidget: explanationWidget
     };
 }

@@ -76,13 +76,38 @@ function renderWidgets() {
 
 function generateQuestion(onAnswer) {
     var generator = random.choice([
-        generateAngleMultipleChoiceQuestion,
+        generateAngleTypeComparisonQuestionWidget,
         generateAngleIdentificationQuestion
     ]);
     return generator(onAnswer);
 }
 
-function generateAngleMultipleChoiceQuestion(onAnswer) {
+function generateAngleTypeComparisonQuestionWidget(onAnswer) {
+    var question = generateAngleTypeComparisonQuestion();
+    
+    var explanationWidget = knockoutWidgets.create({
+        template: fs.readFileSync(__dirname + "/angle-type-comparison-explanation.html"),
+        init: function() {
+            return {
+                angleTypes: question.selectedTypes
+            };
+        },
+        dependencies: {
+            "drawAngle": drawAngleWidget
+        }
+    });
+    
+    // TODO: add argument binding for widgets
+    return function(element) {
+        return multipleChoice.render(element, {
+            question: question,
+            explanationWidget: explanationWidget,
+            onAnswer: onAnswer
+        });
+    };
+}
+
+function generateAngleTypeComparisonQuestion() {
     var operations = [
         {name: "larger", apply: function(a, b) { return a >= b; }},
         {name: "smaller", apply: function(a, b) { return a <= b; }}
@@ -101,28 +126,10 @@ function generateAngleMultipleChoiceQuestion(onAnswer) {
         return {text: angleType.value.name, isCorrect: isCorrect(angleType)};
     }
     
-    var explanationWidget = knockoutWidgets.create({
-        template: fs.readFileSync(__dirname + "/angle-type-comparison-explanation.html"),
-        init: function() {
-            return {
-                angleTypes: _.pluck(selectedTypes, "value")
-            };
-        },
-        dependencies: {
-            "drawAngle": drawAngleWidget
-        }
-    });
-    
-    // TODO: add argument binding for widgets
-    return function(element) {
-        return multipleChoice.render(element, {
-            question: {
-                text: "Which angle is " + operation.name + "?",
-                choices: selectedTypes.map(angleTypeToChoice),
-                explanationWidget: explanationWidget
-            },
-            onAnswer: onAnswer
-        });
+    return {
+        text: "Which angle is " + operation.name + "?",
+        choices: selectedTypes.map(angleTypeToChoice),
+        selectedTypes: _.pluck(selectedTypes, "value")
     };
 }
 
