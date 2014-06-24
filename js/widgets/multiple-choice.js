@@ -4,7 +4,7 @@ var _ = require("underscore");
 var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
-exports.render = knockoutWidgets.create({
+module.exports = knockoutWidgets.create({
     template: fs.readFileSync(__dirname + "/multiple-choice.html", "utf8"),
     init: init
 });

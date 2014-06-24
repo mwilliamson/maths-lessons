@@ -3,7 +3,7 @@ var fs = require("fs");
 var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
-exports.render = knockoutWidgets.create({
+module.exports = knockoutWidgets.create({
     template: fs.readFileSync(__dirname + "/question-with-explanation.html", "utf8"),
     init: init
 });

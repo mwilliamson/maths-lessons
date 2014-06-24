@@ -2,5 +2,5 @@
     "undef": true,
     "unused": true,
     
-    "predef": ["require", "exports", "__dirname"]
+    "predef": ["require", "exports", "__dirname", "module"]
 }

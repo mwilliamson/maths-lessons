@@ -12,11 +12,9 @@ var testWidget = require("./widgets/test");
 var multipleChoice = require("./widgets/multiple-choice");
 var questionWithExplanation = require("./widgets/question-with-explanation");
 
-var renderTestWidget = function(element) {
-    return testWidget.render(element, {
-        generateQuestion: generateQuestion
-    });
-};
+var renderTestWidget = withOptions(testWidget, {
+    generateQuestion: generateQuestion
+});
 
 var widgets = {
     "types-of-angles-test": renderTestWidget,
@@ -98,13 +96,11 @@ function generateAngleTypeComparisonQuestionWidget(onAnswer) {
         }
     });
     
-    return function(element) {
-        return questionWithExplanation.render(element, {
-            questionWidget: withOptions(multipleChoice.render, {question: question}),
-            explanationWidget: explanationWidget,
-            onAnswer: onAnswer
-        });
-    };
+    return withOptions(questionWithExplanation, {
+        questionWidget: withOptions(multipleChoice, {question: question}),
+        explanationWidget: explanationWidget,
+        onAnswer: onAnswer
+    });
 }
 
 function generateAngleTypeComparisonQuestion() {
