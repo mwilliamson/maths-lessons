@@ -478,7 +478,7 @@ var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
 module.exports = knockoutWidgets.create({
-    template: "<div data-bind=\"widget: questionWidget\"></div>\n<!-- ko if: resultText -->\n  <p class=\"result\" data-bind=\"text: resultText, css: resultClass\"></p>\n  <p class=\"secondary-action\" data-bind=\"click: showExplanation\">Show explanation</p>\n<!-- /ko -->\n<!-- ko if: shouldShowExplanation -->\n  <div data-bind=\"widget: explanationWidget\"></div>\n<!-- /ko -->\n",
+    template: "<div data-bind=\"widget: questionWidget\"></div>\n<!-- ko if: resultText -->\n  <p class=\"result\" data-bind=\"text: resultText, css: resultClass\"></p>\n  <p class=\"show-explanation\" data-bind=\"click: showExplanation\">Show explanation</p>\n<!-- /ko -->\n<!-- ko if: shouldShowExplanation -->\n  <div data-bind=\"widget: explanationWidget\"></div>\n<!-- /ko -->\n",
     init: init
 });
 

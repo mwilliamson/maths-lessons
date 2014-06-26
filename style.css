@@ -67,6 +67,12 @@ div[data-widget='angle-example'] {
 .test .choices li.disabled.selected {
   background-color: #0055FF;
 }
+.show-explanation {
+  padding: 5px 10px;
+  cursor: pointer;
+  background-color: #019300;
+  color: #fff;
+}
 .result {
   min-height: 1em;
 }
