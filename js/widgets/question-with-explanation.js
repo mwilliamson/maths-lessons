@@ -29,7 +29,8 @@ function init(options) {
                     onAnswer(answer);
                     resultText(answer.resultText);
                     resultClass(answer.isCorrect ? "result-correct" : "result-incorrect");
-                }
+                },
+                shouldShowExplanation: shouldShowExplanation.subscribe.bind(shouldShowExplanation)
             });
         }
     };

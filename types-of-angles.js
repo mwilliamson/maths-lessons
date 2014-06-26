@@ -177,7 +177,7 @@ function renderWidgets() {
 function generateQuestion(onAnswer) {
     var generator = random.choice([
         generateAngleTypeComparisonQuestionWidget,
-        generateAngleIdentificationQuestionWidget
+        generateAngleIdentificationQuestionWidget2
     ]);
     return generator(onAnswer);
 }
@@ -263,18 +263,35 @@ function generateAngleTypeComparisonQuestion() {
     };
 }
 
-function generateAngleIdentificationQuestionWidget(onAnswer) {
+// TODO: need to think of a *much* better name!
+function generateAngleIdentificationQuestionWidget2(onAnswer) {
+    return withOptions(questionWithExplanation, {
+        questionWidget: generateAngleIdentificationQuestionWidget(),
+        explanationWidget: function() { },
+        onAnswer: onAnswer
+    });
+}
+
+function generateAngleIdentificationQuestionWidget() {
     var question = generateAngleIdentificationQuestion();
     
     var answer = knockout.observable("");
-    function submitAnswer() {
-        var isCorrect = question.isCorrect(answer());
-        onAnswer({isCorrect: isCorrect});
-    }
     
     return knockoutWidgets.create({
         template: Buffer("PHA+V2hhdCBzb3J0IG9mIGFuZ2xlIGlzIHRoaXM/PC9wPgoKPGRpdiBkYXRhLWJpbmQ9IndpZGdldDogJ2RyYXdBbmdsZScsIHdpZGdldE9wdGlvbnM6IGRyYXdBbmdsZU9wdGlvbnMiPgo8L2Rpdj4KCjxmb3JtIGRhdGEtYmluZD0ic3VibWl0OiBzdWJtaXRBbnN3ZXIiPgogIDxpbnB1dCB0eXBlPSJ0ZXh0IiBkYXRhLWJpbmQ9InZhbHVlOiBhbnN3ZXIiIC8+CiAgPGlucHV0IHR5cGU9InN1Ym1pdCIgdmFsdWU9IlN1Ym1pdCIgLz4KPC9mb3JtPgo=","base64"),
-        init: function() {
+        init: function(options) {
+            function submitAnswer() {
+                var isCorrect = question.isCorrect(answer());
+                var resultText = isCorrect ?
+                    "Correct!" :
+                    "The correct answer is: " + question.angleTypeName;
+                
+                options.onAnswer({
+                    isCorrect: isCorrect,
+                    resultText: resultText
+                });
+            }
+    
             return {
                 drawAngleOptions: {
                     angle: question.angle,
@@ -294,26 +311,32 @@ function generateAngleIdentificationQuestion() {
     var angleTypes = [
         {
             keyword: "acute",
+            name: "Acute angle",
             range: [0, 90]
         },
         {
             keyword: "right",
+            name: "Right angle",
             angle: 90
         },
         {
             keyword: "obtuse",
+            name: "Obtuse angle",
             range: [90, 180]
         },
         {
             keyword: "straight",
+            name: "Straight line",
             angle: 180
         },
         {
             keyword: "reflex",
+            name: "Reflex angle",
             range: [180, 360]
         },
         {
             keyword: "full",
+            name: "Full turn",
             angle: 360
         }
     ];
@@ -336,6 +359,7 @@ function generateAngleIdentificationQuestion() {
     
     return {
         angle: angle,
+        angleTypeName: angleType.name,
         startAzimuth: startAzimuth,
         isCorrect: isCorrect
     };
@@ -503,7 +527,8 @@ function init(options) {
                     onAnswer(answer);
                     resultText(answer.resultText);
                     resultClass(answer.isCorrect ? "result-correct" : "result-incorrect");
-                }
+                },
+                shouldShowExplanation: shouldShowExplanation.subscribe.bind(shouldShowExplanation)
             });
         }
     };

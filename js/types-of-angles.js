@@ -34,7 +34,7 @@ function renderWidgets() {
 function generateQuestion(onAnswer) {
     var generator = random.choice([
         generateAngleTypeComparisonQuestionWidget,
-        generateAngleIdentificationQuestionWidget
+        generateAngleIdentificationQuestionWidget2
     ]);
     return generator(onAnswer);
 }
@@ -120,18 +120,35 @@ function generateAngleTypeComparisonQuestion() {
     };
 }
 
-function generateAngleIdentificationQuestionWidget(onAnswer) {
+// TODO: need to think of a *much* better name!
+function generateAngleIdentificationQuestionWidget2(onAnswer) {
+    return withOptions(questionWithExplanation, {
+        questionWidget: generateAngleIdentificationQuestionWidget(),
+        explanationWidget: function() { },
+        onAnswer: onAnswer
+    });
+}
+
+function generateAngleIdentificationQuestionWidget() {
     var question = generateAngleIdentificationQuestion();
     
     var answer = knockout.observable("");
-    function submitAnswer() {
-        var isCorrect = question.isCorrect(answer());
-        onAnswer({isCorrect: isCorrect});
-    }
     
     return knockoutWidgets.create({
         template: fs.readFileSync(__dirname + "/angle-type-identification.html"),
-        init: function() {
+        init: function(options) {
+            function submitAnswer() {
+                var isCorrect = question.isCorrect(answer());
+                var resultText = isCorrect ?
+                    "Correct!" :
+                    "The correct answer is: " + question.angleTypeName;
+                
+                options.onAnswer({
+                    isCorrect: isCorrect,
+                    resultText: resultText
+                });
+            }
+    
             return {
                 drawAngleOptions: {
                     angle: question.angle,
@@ -151,26 +168,32 @@ function generateAngleIdentificationQuestion() {
     var angleTypes = [
         {
             keyword: "acute",
+            name: "Acute angle",
             range: [0, 90]
         },
         {
             keyword: "right",
+            name: "Right angle",
             angle: 90
         },
         {
             keyword: "obtuse",
+            name: "Obtuse angle",
             range: [90, 180]
         },
         {
             keyword: "straight",
+            name: "Straight line",
             angle: 180
         },
         {
             keyword: "reflex",
+            name: "Reflex angle",
             range: [180, 360]
         },
         {
             keyword: "full",
+            name: "Full turn",
             angle: 360
         }
     ];
@@ -193,6 +216,7 @@ function generateAngleIdentificationQuestion() {
     
     return {
         angle: angle,
+        angleTypeName: angleType.name,
         startAzimuth: startAzimuth,
         isCorrect: isCorrect
     };
