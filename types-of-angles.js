@@ -265,19 +265,20 @@ function generateAngleTypeComparisonQuestion() {
 
 // TODO: need to think of a *much* better name!
 function generateAngleIdentificationQuestionWidget2(onAnswer) {
+    var widgets = generateAngleIdentificationQuestionWidgets();
     return withOptions(questionWithExplanation, {
-        questionWidget: generateAngleIdentificationQuestionWidget(),
-        explanationWidget: function() { },
+        questionWidget: widgets.question,
+        explanationWidget: widgets.explanation,
         onAnswer: onAnswer
     });
 }
 
-function generateAngleIdentificationQuestionWidget() {
+function generateAngleIdentificationQuestionWidgets() {
     var question = generateAngleIdentificationQuestion();
     
     var answer = knockout.observable("");
     
-    return knockoutWidgets.create({
+    var questionWidget = knockoutWidgets.create({
         template: Buffer("PHA+V2hhdCBzb3J0IG9mIGFuZ2xlIGlzIHRoaXM/PC9wPgoKPGRpdiBkYXRhLWJpbmQ9IndpZGdldDogJ2RyYXdBbmdsZScsIHdpZGdldE9wdGlvbnM6IGRyYXdBbmdsZU9wdGlvbnMiPgo8L2Rpdj4KCjxmb3JtIGRhdGEtYmluZD0ic3VibWl0OiBzdWJtaXRBbnN3ZXIiPgogIDxpbnB1dCB0eXBlPSJ0ZXh0IiBkYXRhLWJpbmQ9InZhbHVlOiBhbnN3ZXIiIC8+CiAgPGlucHV0IHR5cGU9InN1Ym1pdCIgdmFsdWU9IlN1Ym1pdCIgLz4KPC9mb3JtPgo=","base64"),
         init: function(options) {
             function submitAnswer() {
@@ -291,7 +292,7 @@ function generateAngleIdentificationQuestionWidget() {
                     resultText: resultText
                 });
             }
-    
+            
             return {
                 drawAngleOptions: {
                     angle: question.angle,
@@ -305,6 +306,53 @@ function generateAngleIdentificationQuestionWidget() {
             "drawAngle": drawAngleWidget
         }
     });
+    
+    var explanationWidget = knockoutWidgets.create({
+        template: Buffer("PHAgZGF0YS1iaW5kPSJ0ZXh0OiBleHBsYW5hdGlvblRleHQiPjwvcD4KCjxkaXYgY2xhc3M9ImlubGluZS1pdGVtcyIgZGF0YS1iaW5kPSJpZjogbGVmdCB8fCBjZW50cmUgfHwgcmlnaHQiPgoKICA8IS0tIGtvIGlmOiBsZWZ0IC0tPgogICAgPGRpdj4KICAgICAgPGg0IGRhdGEtYmluZD0idGV4dDogbGVmdC5uYW1lIj48aDQ+CiAgICAgIDxkaXYgZGF0YS1iaW5kPSJ3aWRnZXQ6ICdkcmF3QW5nbGUnLCB3aWRnZXRPcHRpb25zOiBsZWZ0LmRyYXciPgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogIDwhLS0gL2tvIC0tPgoKICA8IS0tIGtvIGlmOiBjZW50cmUgLS0+CiAgICA8ZGl2PgogICAgICA8aDQgZGF0YS1iaW5kPSJ0ZXh0OiBjZW50cmUubmFtZSI+PGg0PgogICAgICA8ZGl2IGRhdGEtYmluZD0id2lkZ2V0OiAnZHJhd0FuZ2xlJywgd2lkZ2V0T3B0aW9uczogY2VudHJlLmRyYXciPgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogIDwhLS0gL2tvIC0tPgoKICA8IS0tIGtvIGlmOiByaWdodCAtLT4KICAgIDxkaXY+CiAgICAgIDxoNCBkYXRhLWJpbmQ9InRleHQ6IHJpZ2h0Lm5hbWUiPjxoND4KICAgICAgPGRpdiBkYXRhLWJpbmQ9IndpZGdldDogJ2RyYXdBbmdsZScsIHdpZGdldE9wdGlvbnM6IHJpZ2h0LmRyYXciPgogICAgICA8L2Rpdj4KICAgIDwvZGl2PgogIDwhLS0gL2tvIC0tPgoKPC9kaXY+Cg==","base64"),
+        init: function() {
+            var left;
+            var centre;
+            var right;
+            if (question.explanation.left || question.explanation.right) {
+                centre = {
+                    name: question.angleTypeName,
+                    draw: question
+                };
+                if (question.explanation.left) {
+                    left = {
+                        name: question.explanation.left.name,
+                        draw: {
+                            angle: question.explanation.left.angle,
+                            startAzimuth: question.startAzimuth
+                        }
+                    };
+                }
+                if (question.explanation.right) {
+                    right = {
+                        name: question.explanation.right.name,
+                        draw: {
+                            angle: question.explanation.right.angle,
+                            startAzimuth: question.startAzimuth
+                        }
+                    };
+                }
+            }
+    
+            return {
+                left: left,
+                centre: centre,
+                right: right,
+                explanationText: question.explanation.text
+            };
+        },
+        dependencies: {
+            "drawAngle": drawAngleWidget
+        }
+    });
+    return {
+        question: questionWidget,
+        explanation: explanationWidget
+    };
 }
 
 function generateAngleIdentificationQuestion() {
@@ -312,32 +360,54 @@ function generateAngleIdentificationQuestion() {
         {
             keyword: "acute",
             name: "Acute angle",
-            range: [0, 90]
+            range: [0, 90],
+            explanation: {
+                text: "An acute angle is smaller than a right angle",
+                left: {name: "Right angle", angle: 90}
+            }
         },
         {
             keyword: "right",
             name: "Right angle",
-            angle: 90
+            angle: 90,
+            explanation: {
+                text: "A right angle is exactly one quarter of a full turn"
+            }
         },
         {
             keyword: "obtuse",
             name: "Obtuse angle",
-            range: [90, 180]
+            range: [90, 180],
+            explanation: {
+                text: "An obtuse angle is bigger than a right angle and smaller than a straight line",
+                left: {name: "Right angle", angle: 90},
+                right: {name: "Straight line", angle: 180}
+            }
         },
         {
             keyword: "straight",
             name: "Straight line",
-            angle: 180
+            angle: 180,
+            explanation: {
+                text: "A straight line is exactly half a full turn"
+            }
         },
         {
             keyword: "reflex",
             name: "Reflex angle",
-            range: [180, 360]
+            range: [180, 360],
+            explanation: {
+                text: "A reflex angle is bigger than a straight line (shown in orange) and smaller than a full turn",
+                right: {name: "Straight line", angle: 180}
+            }
         },
         {
             keyword: "full",
             name: "Full turn",
-            angle: 360
+            angle: 360,
+            explanation: {
+                text: "A full turn is an angle that goes all the way around"
+            }
         }
     ];
 
@@ -360,6 +430,7 @@ function generateAngleIdentificationQuestion() {
     return {
         angle: angle,
         angleTypeName: angleType.name,
+        explanation: angleType.explanation,
         startAzimuth: startAzimuth,
         isCorrect: isCorrect
     };
@@ -528,7 +599,13 @@ function init(options) {
                     resultText(answer.resultText);
                     resultClass(answer.isCorrect ? "result-correct" : "result-incorrect");
                 },
-                shouldShowExplanation: shouldShowExplanation.subscribe.bind(shouldShowExplanation)
+                onShowExplanation: function(func) {
+                    shouldShowExplanation.subscribe(function(value) {
+                        if (value) {
+                            func();
+                        }
+                    });
+                }
             });
         }
     };

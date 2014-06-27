@@ -122,19 +122,20 @@ function generateAngleTypeComparisonQuestion() {
 
 // TODO: need to think of a *much* better name!
 function generateAngleIdentificationQuestionWidget2(onAnswer) {
+    var widgets = generateAngleIdentificationQuestionWidgets();
     return withOptions(questionWithExplanation, {
-        questionWidget: generateAngleIdentificationQuestionWidget(),
-        explanationWidget: function() { },
+        questionWidget: widgets.question,
+        explanationWidget: widgets.explanation,
         onAnswer: onAnswer
     });
 }
 
-function generateAngleIdentificationQuestionWidget() {
+function generateAngleIdentificationQuestionWidgets() {
     var question = generateAngleIdentificationQuestion();
     
     var answer = knockout.observable("");
     
-    return knockoutWidgets.create({
+    var questionWidget = knockoutWidgets.create({
         template: fs.readFileSync(__dirname + "/angle-type-identification.html"),
         init: function(options) {
             function submitAnswer() {
@@ -148,7 +149,7 @@ function generateAngleIdentificationQuestionWidget() {
                     resultText: resultText
                 });
             }
-    
+            
             return {
                 drawAngleOptions: {
                     angle: question.angle,
@@ -162,6 +163,53 @@ function generateAngleIdentificationQuestionWidget() {
             "drawAngle": drawAngleWidget
         }
     });
+    
+    var explanationWidget = knockoutWidgets.create({
+        template: fs.readFileSync(__dirname + "/angle-type-identification-explanation.html"),
+        init: function() {
+            var left;
+            var centre;
+            var right;
+            if (question.explanation.left || question.explanation.right) {
+                centre = {
+                    name: question.angleTypeName,
+                    draw: question
+                };
+                if (question.explanation.left) {
+                    left = {
+                        name: question.explanation.left.name,
+                        draw: {
+                            angle: question.explanation.left.angle,
+                            startAzimuth: question.startAzimuth
+                        }
+                    };
+                }
+                if (question.explanation.right) {
+                    right = {
+                        name: question.explanation.right.name,
+                        draw: {
+                            angle: question.explanation.right.angle,
+                            startAzimuth: question.startAzimuth
+                        }
+                    };
+                }
+            }
+    
+            return {
+                left: left,
+                centre: centre,
+                right: right,
+                explanationText: question.explanation.text
+            };
+        },
+        dependencies: {
+            "drawAngle": drawAngleWidget
+        }
+    });
+    return {
+        question: questionWidget,
+        explanation: explanationWidget
+    };
 }
 
 function generateAngleIdentificationQuestion() {
@@ -169,32 +217,54 @@ function generateAngleIdentificationQuestion() {
         {
             keyword: "acute",
             name: "Acute angle",
-            range: [0, 90]
+            range: [0, 90],
+            explanation: {
+                text: "An acute angle is smaller than a right angle",
+                left: {name: "Right angle", angle: 90}
+            }
         },
         {
             keyword: "right",
             name: "Right angle",
-            angle: 90
+            angle: 90,
+            explanation: {
+                text: "A right angle is exactly one quarter of a full turn"
+            }
         },
         {
             keyword: "obtuse",
             name: "Obtuse angle",
-            range: [90, 180]
+            range: [90, 180],
+            explanation: {
+                text: "An obtuse angle is bigger than a right angle and smaller than a straight line",
+                left: {name: "Right angle", angle: 90},
+                right: {name: "Straight line", angle: 180}
+            }
         },
         {
             keyword: "straight",
             name: "Straight line",
-            angle: 180
+            angle: 180,
+            explanation: {
+                text: "A straight line is exactly half a full turn"
+            }
         },
         {
             keyword: "reflex",
             name: "Reflex angle",
-            range: [180, 360]
+            range: [180, 360],
+            explanation: {
+                text: "A reflex angle is bigger than a straight line (shown in orange) and smaller than a full turn",
+                right: {name: "Straight line", angle: 180}
+            }
         },
         {
             keyword: "full",
             name: "Full turn",
-            angle: 360
+            angle: 360,
+            explanation: {
+                text: "A full turn is an angle that goes all the way around"
+            }
         }
     ];
 
@@ -217,6 +287,7 @@ function generateAngleIdentificationQuestion() {
     return {
         angle: angle,
         angleTypeName: angleType.name,
+        explanation: angleType.explanation,
         startAzimuth: startAzimuth,
         isCorrect: isCorrect
     };

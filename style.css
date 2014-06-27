@@ -91,3 +91,6 @@ div[data-widget='angle-example'] {
   width: 44%;
   box-sizing: border-box;
 }
+.inline-items > div {
+  display: inline-block;
+}

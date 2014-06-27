@@ -1,0 +1,29 @@
+<p data-bind="text: explanationText"></p>
+
+<div class="inline-items" data-bind="if: left || centre || right">
+
+  <!-- ko if: left -->
+    <div>
+      <h4 data-bind="text: left.name"><h4>
+      <div data-bind="widget: 'drawAngle', widgetOptions: left.draw">
+      </div>
+    </div>
+  <!-- /ko -->
+
+  <!-- ko if: centre -->
+    <div>
+      <h4 data-bind="text: centre.name"><h4>
+      <div data-bind="widget: 'drawAngle', widgetOptions: centre.draw">
+      </div>
+    </div>
+  <!-- /ko -->
+
+  <!-- ko if: right -->
+    <div>
+      <h4 data-bind="text: right.name"><h4>
+      <div data-bind="widget: 'drawAngle', widgetOptions: right.draw">
+      </div>
+    </div>
+  <!-- /ko -->
+
+</div>

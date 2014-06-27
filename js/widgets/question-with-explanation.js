@@ -30,7 +30,13 @@ function init(options) {
                     resultText(answer.resultText);
                     resultClass(answer.isCorrect ? "result-correct" : "result-incorrect");
                 },
-                shouldShowExplanation: shouldShowExplanation.subscribe.bind(shouldShowExplanation)
+                onShowExplanation: function(func) {
+                    shouldShowExplanation.subscribe(function(value) {
+                        if (value) {
+                            func();
+                        }
+                    });
+                }
             });
         }
     };
