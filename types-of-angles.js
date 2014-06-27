@@ -598,13 +598,6 @@ function init(options) {
                     onAnswer(answer);
                     resultText(answer.resultText);
                     resultClass(answer.isCorrect ? "result-correct" : "result-incorrect");
-                },
-                onShowExplanation: function(func) {
-                    shouldShowExplanation.subscribe(function(value) {
-                        if (value) {
-                            func();
-                        }
-                    });
                 }
             });
         }
@@ -617,9 +610,14 @@ function init(options) {
 var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
+// TODO: this is a bit of hack to add the CSS class
+module.exports = function(element, options) {
+    element.classList.add("test");
+    return innerWidget(element, options);
+};
 
-module.exports = knockoutWidgets.create({
-    template: "<div class=\"test\">\n  <p>\n    Progress: <span data-bind=\"text: progress.correct\"></span>/<span data-bind=\"text: progress.total\"></span>\n  </p>\n\n  <div data-bind=\"widget: questionWidget\"></div>\n  \n  <p class=\"primary-action\" data-bind=\"click: next, visible: showNextQuestion\">Next question</p>\n</div>\n",
+var innerWidget = knockoutWidgets.create({
+    template: "<p>\n  Progress: <span data-bind=\"text: progress.correct\"></span>/<span data-bind=\"text: progress.total\"></span>\n</p>\n\n<div data-bind=\"widget: questionWidget\"></div>\n\n<p class=\"primary-action\" data-bind=\"click: next, visible: showNextQuestion\">Next question</p>\n",
     init: function(options) {
         var generateQuestion = options.generateQuestion;
         

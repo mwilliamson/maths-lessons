@@ -10,20 +10,6 @@ body {
   margin: 0 auto;
   max-width: 630px;
 }
-.widget {
-  display: inline-block;
-}
-div[data-widget] {
-  margin-right: 10px;
-  margin-bottom: 10px;
-  background-color: #f3f3f3;
-}
-div[data-widget]:last-child {
-  margin-right: 0;
-}
-div[data-widget='angle-example'] {
-  display: inline-block;
-}
 .action {
   padding: 5px 10px;
   cursor: pointer;
@@ -41,9 +27,10 @@ div[data-widget='angle-example'] {
   color: #fff;
 }
 .test {
-  box-sizing: border-box;
   width: 100%;
+  margin: 0 -20px;
   padding: 10px 20px;
+  background-color: #f0f0f5;
 }
 .test .choices {
   margin: 0;
@@ -93,4 +80,12 @@ div[data-widget='angle-example'] {
 }
 .inline-items > div {
   display: inline-block;
+}
+.diagram {
+  margin-right: 10px;
+  margin-bottom: 10px;
+  background-color: #f3f3f3;
+}
+.diagram:last-child {
+  margin-right: 0;
 }
