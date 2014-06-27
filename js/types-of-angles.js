@@ -254,7 +254,7 @@ function generateAngleIdentificationQuestion() {
             name: "Reflex angle",
             range: [180, 360],
             explanation: {
-                text: "A reflex angle is bigger than a straight line (shown in orange) and smaller than a full turn",
+                text: "A reflex angle is bigger than a straight line and smaller than a full turn",
                 right: {name: "Straight line", angle: 180}
             }
         },
