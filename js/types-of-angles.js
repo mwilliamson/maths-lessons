@@ -220,7 +220,7 @@ function generateAngleIdentificationQuestion() {
             range: [0, 90],
             explanation: {
                 text: "An acute angle is smaller than a right angle",
-                left: {name: "Right angle", angle: 90}
+                right: {name: "Right angle", angle: 90}
             }
         },
         {
@@ -255,7 +255,7 @@ function generateAngleIdentificationQuestion() {
             range: [180, 360],
             explanation: {
                 text: "A reflex angle is bigger than a straight line and smaller than a full turn",
-                right: {name: "Straight line", angle: 180}
+                left: {name: "Straight line", angle: 180}
             }
         },
         {
