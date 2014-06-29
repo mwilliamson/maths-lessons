@@ -1,7 +1,9 @@
 <div data-bind="widget: questionWidget"></div>
 <!-- ko if: resultText -->
   <p class="result" data-bind="text: resultText, css: resultClass"></p>
-  <p class="show-explanation" data-bind="click: showExplanation">Show explanation</p>
+  <!-- ko ifnot: shouldShowExplanation -->
+    <p class="show-explanation" data-bind="click: showExplanation">Show explanation</p>
+  <!-- /ko -->
 <!-- /ko -->
 <!-- ko if: shouldShowExplanation -->
   <div data-bind="widget: explanationWidget"></div>
