@@ -65,7 +65,7 @@ body {
   min-height: 1em;
 }
 .result-correct {
-  color: #25990E;
+  color: #25990e;
 }
 .row-2 {
   overflow: auto;
@@ -89,4 +89,14 @@ body {
 }
 .diagram:last-child {
   margin-right: 0;
+}
+.mark {
+  display: inline-block;
+  width: 1em;
+}
+.mark-unknown {
+  color: #666;
+}
+.mark.mark-correct {
+  color: #25990e;
 }

@@ -573,7 +573,7 @@ var knockout = require("knockout");
 var knockoutWidgets = require("web-widgets-knockout");
 
 module.exports = knockoutWidgets.create({
-    template: "<div data-bind=\"widget: questionWidget\"></div>\n<!-- ko if: resultText -->\n  <p class=\"result\" data-bind=\"text: resultText, css: resultClass\"></p>\n  <p class=\"show-explanation\" data-bind=\"click: showExplanation\">Show explanation</p>\n<!-- /ko -->\n<!-- ko if: shouldShowExplanation -->\n  <div data-bind=\"widget: explanationWidget\"></div>\n<!-- /ko -->\n",
+    template: "<div data-bind=\"widget: questionWidget\"></div>\n<!-- ko if: resultText -->\n  <p class=\"result\" data-bind=\"text: resultText, css: resultClass\"></p>\n  <!-- ko ifnot: shouldShowExplanation -->\n    <p class=\"show-explanation\" data-bind=\"click: showExplanation\">Show explanation</p>\n  <!-- /ko -->\n<!-- /ko -->\n<!-- ko if: shouldShowExplanation -->\n  <div data-bind=\"widget: explanationWidget\"></div>\n<!-- /ko -->\n",
     init: init
 });
 
@@ -617,15 +617,35 @@ module.exports = function(element, options) {
 };
 
 var innerWidget = knockoutWidgets.create({
-    template: "<p>\n  Progress: <span data-bind=\"text: progress.correct\"></span>/<span data-bind=\"text: progress.total\"></span>\n</p>\n\n<div data-bind=\"widget: questionWidget\"></div>\n\n<p class=\"primary-action\" data-bind=\"click: next, visible: showNextQuestion\">Next question</p>\n",
+    template: "<p>\n  Goal: Get <span data-bind=\"text: progress.target\"></span> questions right in a row <br />\n  Progress:\n  <span data-bind=\"foreach: progress.marks()\">\n    <span class=\"mark\" data-bind=\"css: className, text: text\"></span>\n  </span>\n  <span data-bind=\"style: {visibility: progress.done() ? 'visible' : 'hidden'}\">\n    <br />You've hit the goal, but you can carry on answering questions if you want.\n  </span>\n</p>\n\n<div data-bind=\"widget: questionWidget\"></div>\n\n<p class=\"primary-action\" data-bind=\"click: next, visible: showNextQuestion\">Next question</p>\n",
     init: function(options) {
         var generateQuestion = options.generateQuestion;
         
         var showNextQuestion = knockout.observable(false);
         var progress = {
             correct: knockout.observable(0),
-            total: 10
+            target: 10,
+            marks: function() {
+                var marks = [];
+                var i;
+                for (i = 0; i < progress.correct(); i++) {
+                    marks.push({
+                        className: "mark-correct",
+                        text: "✓"
+                    });
+                }
+                for (i = progress.correct(); i < progress.target; i++) {
+                    marks.push({
+                        className: "mark-unknown",
+                        text: "?"
+                    });
+                }
+                return marks;
+            }
         };
+        progress.done = knockout.computed(function() {
+            return progress.correct() >= progress.target;
+        });
         
         var question = knockout.observable();
         next();
@@ -638,6 +658,8 @@ var innerWidget = knockoutWidgets.create({
         function onAnswer(answer) {
             if (answer.isCorrect) {
                 progress.correct(progress.correct() + 1);
+            } else {
+                progress.correct(0);
             }
             showNextQuestion(true);
         }
