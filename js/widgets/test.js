@@ -36,6 +36,9 @@ var innerWidget = knockoutWidgets.create({
                 return marks;
             }
         };
+        progress.done = knockout.computed(function() {
+            return progress.correct() >= progress.target;
+        });
         
         var question = knockout.observable();
         next();
