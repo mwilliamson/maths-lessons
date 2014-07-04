@@ -17,7 +17,24 @@ var innerWidget = knockoutWidgets.create({
         var showNextQuestion = knockout.observable(false);
         var progress = {
             correct: knockout.observable(0),
-            total: 10
+            target: 10,
+            marks: function() {
+                var marks = [];
+                var i;
+                for (i = 0; i < progress.correct(); i++) {
+                    marks.push({
+                        className: "mark-correct",
+                        text: "✓"
+                    });
+                }
+                for (i = progress.correct(); i < progress.target; i++) {
+                    marks.push({
+                        className: "mark-unknown",
+                        text: "?"
+                    });
+                }
+                return marks;
+            }
         };
         
         var question = knockout.observable();
@@ -31,6 +48,8 @@ var innerWidget = knockoutWidgets.create({
         function onAnswer(answer) {
             if (answer.isCorrect) {
                 progress.correct(progress.correct() + 1);
+            } else {
+                progress.correct(0);
             }
             showNextQuestion(true);
         }
