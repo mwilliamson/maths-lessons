@@ -1,5 +1,12 @@
 <p>
-  Progress: <span data-bind="text: progress.correct"></span>/<span data-bind="text: progress.total"></span>
+  Goal: Get <span data-bind="text: progress.target"></span> questions right in a row <br />
+  Progress:
+  <span data-bind="foreach: progress.marks()">
+    <span class="mark" data-bind="css: className, text: text"></span>
+  </span>
+  <span data-bind="style: {visibility: progress.done() ? 'visible' : 'hidden'}">
+    <br />You've hit the goal, but you can carry on answering questions if you want.
+  </span>
 </p>
 
 <div data-bind="widget: questionWidget"></div>
